@@ -218,9 +218,10 @@ st.markdown("---")
 st.markdown('<div class="section-header">🇰🇪 Kenya Context</div>', unsafe_allow_html=True)
 
 col_k1, col_k2, col_k3 = st.columns(3)
-col_k1.metric("Kenyan records in dataset", "39", "0.06% of total")
-col_k2.metric("Kenyan test records", "8", "All predicted correctly")
-col_k3.metric("East Africa VC share", "~10%", "of continental VC flows")
+col_k1.metric("Kenyan records in dataset", "39", delta=None)
+col_k2.metric("Kenyan test records", "8", delta=None)
+col_k3.metric("East Africa VC share", "~10%", delta=None)
+st.caption("0.06% of total dataset · All 8 test records predicted correctly · East Africa receives ~10% of continental VC flows")
 
 st.markdown("""
 Kenya's startup ecosystem — anchored by innovations like M-Pesa and supported by
