@@ -1,0 +1,5 @@
+Model,ROC-AUC,F1-macro,Notes,Target met
+Logistic Regression (baseline),0.7711,0.3822,"Class-balanced, scaled",✗
+Random Forest,0.8007,0.4237,"300 trees, balanced",✓
+XGBoost (initial),0.8025,0.4219,"SMOTE, default params",✓
+XGBoost (tuned) ★,0.8078,0.4206,"RandomizedSearchCV, 5-fold CV",✓
