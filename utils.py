@@ -55,13 +55,18 @@ TOP_SECTORS = [
 # ── Cached loaders — run once per session ────────────────────────────────────
 @st.cache_resource(show_spinner="Loading models…")
 def load_models():
-    return {
-        "LR":  joblib.load(os.path.join(MODELS_DIR, "model_logistic_regression.pkl")),
-        "RF":  joblib.load(os.path.join(MODELS_DIR, "model_random_forest.pkl")),
-        "XGB": joblib.load(os.path.join(MODELS_DIR, "model_xgboost.pkl")),
+    models = {
+        "LR":        joblib.load(os.path.join(MODELS_DIR, "model_logistic_regression.pkl")),
+        "XGB":       joblib.load(os.path.join(MODELS_DIR, "model_xgboost.pkl")),
         "XGB_tuned": joblib.load(os.path.join(MODELS_DIR, "model_xgboost_tuned.pkl")),
         "scaler":    joblib.load(os.path.join(MODELS_DIR, "scaler.pkl")),
     }
+    # Random Forest (.pkl > 500MB) is stored via Git LFS or excluded from repo.
+    # It is not needed for predictions — only for the comparison table (hardcoded).
+    rf_path = os.path.join(MODELS_DIR, "model_random_forest.pkl")
+    if os.path.exists(rf_path):
+        models["RF"] = joblib.load(rf_path)
+    return models
 
 @st.cache_data(show_spinner="Loading dataset…")
 def load_data():
@@ -78,8 +83,10 @@ def predict_survival(models, input_features: dict) -> dict:
     """
     Takes a dict of feature_name → value, returns probabilities
     from the tuned XGBoost model.
+    Column order is enforced explicitly to match training feature order.
     """
-    X = pd.DataFrame([input_features])[MODEL_FEATURES]
+    # Build DataFrame with columns in exact training order — never rely on dict ordering
+    X = pd.DataFrame([[input_features[f] for f in MODEL_FEATURES]], columns=MODEL_FEATURES)
     best = models["XGB_tuned"]
     probs = best.predict_proba(X)[0]
     pred_idx = int(np.argmax(probs))
