@@ -55,7 +55,7 @@ TOP_SECTORS = [
 # ── Cached loaders — run once per session ────────────────────────────────────
 @st.cache_resource(show_spinner="Loading models…")
 def load_models():
-    models = {
+    return {
         "LR":        joblib.load(os.path.join(MODELS_DIR, "model_logistic_regression.pkl")),
         "XGB":       joblib.load(os.path.join(MODELS_DIR, "model_xgboost.pkl")),
         "XGB_tuned": joblib.load(os.path.join(MODELS_DIR, "model_xgboost_tuned.pkl")),
