@@ -150,7 +150,7 @@ with col_table:
             return "color: #9B2C2C;"
         return ""
     st.dataframe(
-        country_acc.style.applymap(color_acc, subset=["Accuracy"])
+        country_acc.style.map(color_acc, subset=["Accuracy"])
                    .format({"Accuracy": "{:.1%}"}),
         use_container_width=True, hide_index=True,
     )
